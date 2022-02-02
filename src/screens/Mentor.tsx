@@ -2,9 +2,17 @@ import { ScrollView, StyleSheet, View } from 'react-native';
 import React from 'react';
 import { Formik } from 'formik';
 import RNPickerSelect from 'react-native-picker-select';
-import { ScreenContainer, TextInput, Title } from '../global-components';
+import * as Yup from 'yup';
+import {
+  MaskedTextInput,
+  ScreenContainer,
+  TextInput,
+  Title,
+} from '../global-components';
 import { Button } from '../components/Button';
 import { putMentor } from '../util/db';
+import TextInputValidation from '../components/TextInput';
+import Selector from '../components/Selector';
 
 export const pickerSelectStyles = StyleSheet.create({
   inputIOS: {
@@ -32,50 +40,56 @@ const Mentor: React.FC = () => {
       <ScreenContainer>
         <Title style={{ marginBottom: 48 }}>Cadastre-se como mentor</Title>
         <Formik
-          initialValues={{ email: '' }}
+          initialValues={{
+            name: '',
+          }}
+          validationSchema={Yup.object().shape({
+            name: Yup.string()
+              .min(5, 'Muito pequeno')
+              .max(50, 'Muito grande')
+              .required('Campo obrigatório'),
+            email: Yup.string()
+              .email('Email inválido')
+              .required('Campo obrigatório'),
+            whatsapp: Yup.number()
+              .min(9, 'Muito pequeno')
+              .max(12, 'Muito grande')
+              .required('Campo obrigatório'),
+            linkedin: Yup.string().required('Campo obrigatório'),
+            profession: Yup.string().required('Campo obrigatório'),
+            years: Yup.string().required('Campo obrigatório'),
+          })}
           onSubmit={values => putMentor(values)}
         >
-          {({ handleChange, handleBlur, handleSubmit, values }) => (
+          {({ handleSubmit }) => (
             <View>
-              <TextInput
+              <TextInputValidation
+                name="name"
                 style={{ marginBottom: 24 }}
                 placeholder="Nome ou apelido"
-                onChangeText={handleChange('name')}
-                onBlur={handleBlur('name')}
-                value={values.name}
-              />
-              <TextInput
-                style={{ marginBottom: 24 }}
-                placeholder="Descrição"
-                multiline
-                numberOfLines={4}
-                onChangeText={handleChange('description')}
-                onBlur={handleBlur('description')}
-                value={values.description}
               />
               <TextInput
                 style={{ marginBottom: 24 }}
                 placeholder="Email"
-                onChangeText={handleChange('email')}
-                onBlur={handleBlur('email')}
-                value={values.email}
+                name="email"
               />
-              <TextInput
+              <MaskedTextInput
                 style={{ marginBottom: 24 }}
                 placeholder="Whatsapp"
-                onChangeText={handleChange('whatsapp')}
-                onBlur={handleBlur('whatsapp')}
-                value={values.whatsapp}
+                type="cel-phone"
+                options={{
+                  maskType: 'BRL',
+                  withDDD: true,
+                  dddMask: '(99) ',
+                }}
+                name="whatsapp"
               />
               <TextInput
                 style={{ marginBottom: 24 }}
                 placeholder="Usuário no Linkedin"
-                onChangeText={handleChange('linkedin')}
-                onBlur={handleBlur('linkedin')}
-                value={values.linkedin}
+                name="linkedin"
               />
-              <RNPickerSelect
-                onValueChange={handleChange('profession')}
+              <Selector
                 items={[
                   { label: 'Desenvolvedor Frontend', value: 'web-developer' },
                   {
@@ -84,18 +98,17 @@ const Mentor: React.FC = () => {
                   },
                   { label: 'Desenvolvedor Mobile', value: 'mobile-developer' },
                 ]}
+                name="profession"
                 placeholder={{ label: 'Selecione sua profissão' }}
-                style={pickerSelectStyles}
               />
-              <RNPickerSelect
-                onValueChange={handleChange('years')}
+              <Selector
+                name="years"
                 items={[
                   { label: '1-2', value: 'novato' },
                   { label: '3-6', value: 'intermediario' },
                   { label: '6+', value: 'experiente' },
                 ]}
                 placeholder={{ label: 'Anos de experiencia' }}
-                style={pickerSelectStyles}
               />
               <Button style={{ marginTop: 24 }} onPress={handleSubmit}>
                 Enviar

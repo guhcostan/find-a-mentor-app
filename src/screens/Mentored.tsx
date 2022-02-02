@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { FlatList, View } from 'react-native';
+import { ActivityIndicator, FlatList, View } from 'react-native';
 import RNPickerSelect from 'react-native-picker-select';
-import { ScreenContainer, Selector } from '../global-components';
+import { ScreenContainer, Selector, Subtitle } from '../global-components';
 import { getMentors } from '../util/db';
 import MentorItem from '../components/MentorItem';
 import { pickerSelectStyles } from './Mentor';
@@ -9,22 +9,23 @@ import { pickerSelectStyles } from './Mentor';
 const Mentored: React.FC = () => {
   const [mentors, setMentors] = useState([]);
   const [profession, setProfession] = useState();
-  const get = async () => {
+  const [loading, setLoading] = useState(false);
+  const updateMentors = async () => {
+    setLoading(true);
     const mentorsDB = await getMentors(profession);
     setMentors(mentorsDB);
+    setLoading(false);
   };
   useEffect(() => {
-    get();
+    updateMentors();
   }, []);
-  useEffect(() => {
-    get();
-  }, [profession]);
   return (
     <ScreenContainer>
       <RNPickerSelect
         onValueChange={newProfession => {
           setProfession(newProfession);
         }}
+        onDonePress={() => updateMentors()}
         items={[
           { label: 'Desenvolvedor Frontend', value: 'web-developer' },
           {
@@ -36,13 +37,25 @@ const Mentored: React.FC = () => {
         placeholder={{ label: 'Selecione sua profissão' }}
         style={pickerSelectStyles}
       />
-      <FlatList
-        ItemSeparatorComponent={() => (
-          <View style={{ height: 0, marginVertical: 10 }} />
+      <View style={{ flex: 1, justifyContent: 'center' }}>
+        {!loading ? (
+          mentors.length > 0 ? (
+            <FlatList
+              ItemSeparatorComponent={() => (
+                <View style={{ height: 0, marginVertical: 10 }} />
+              )}
+              data={mentors}
+              renderItem={({ item }) => <MentorItem mentor={item} />}
+            />
+          ) : (
+            <Subtitle style={{ textAlign: 'center' }}>
+              Não temos mentores para essa profissão ainda :(
+            </Subtitle>
+          )
+        ) : (
+          <ActivityIndicator />
         )}
-        data={mentors}
-        renderItem={({ item }) => <MentorItem mentor={item} />}
-      />
+      </View>
     </ScreenContainer>
   );
 };

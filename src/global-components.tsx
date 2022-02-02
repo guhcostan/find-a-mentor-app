@@ -1,5 +1,5 @@
 import styled from 'styled-components/native';
-import RNPickerSelect from 'react-native-picker-select';
+import { TextInputMask } from 'react-native-masked-text';
 
 export const Title = styled.Text`
   font-size: 36px;
@@ -20,6 +20,12 @@ export const ScreenContainer = styled.View`
   flex: 1;
 `;
 export const TextInput = styled.TextInput`
+  padding: 10px;
+  font-size: 16px;
+  border-radius: 3px;
+  background-color: ${props => props.theme.colors.white};
+`;
+export const MaskedTextInput = styled(TextInputMask)`
   padding: 10px;
   font-size: 16px;
   border-radius: 3px;
