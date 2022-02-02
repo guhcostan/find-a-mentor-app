@@ -47,27 +47,31 @@ export const SubtitleMentor = styled(Subtitle)`
 const MentorItem: React.FC = ({ mentor, professions }) => {
   const theme = useTheme();
   const showAds = async callback => {
-    const adsViewTodayJSON = await AsyncStorage.getItem('todayView');
-    const adsViewToday = JSON.parse(adsViewTodayJSON || '{}');
-    const today = new Date().getDate();
-    if (adsViewToday?.date !== today) {
-      await AsyncStorage.setItem(
-        'todayView',
-        JSON.stringify({
-          date: today,
-        }),
+    try {
+      const adsViewTodayJSON = await AsyncStorage.getItem('todayView');
+      const adsViewToday = JSON.parse(adsViewTodayJSON || '{}');
+      const today = new Date().getDate();
+      if (adsViewToday?.date !== today) {
+        await AsyncStorage.setItem(
+          'todayView',
+          JSON.stringify({
+            date: today,
+          }),
+        );
+        callback();
+        return;
+      }
+      await AdMobInterstitial.setAdUnitID(
+        'ca-app-pub-6179656158473202/3061477726',
       );
+      await AdMobInterstitial.requestAdAsync({ servePersonalizedAds: true });
+      AdMobInterstitial.addEventListener('interstitialDidClose', () => {
+        callback();
+      });
+      await AdMobInterstitial.showAdAsync();
+    } catch (e) {
       callback();
-      return;
     }
-    await AdMobInterstitial.setAdUnitID(
-      'ca-app-pub-6179656158473202/3061477726',
-    );
-    await AdMobInterstitial.requestAdAsync({ servePersonalizedAds: true });
-    AdMobInterstitial.addEventListener('interstitialDidClose', () => {
-      callback();
-    });
-    await AdMobInterstitial.showAdAsync();
   };
   return (
     <Container>
