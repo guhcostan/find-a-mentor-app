@@ -48,7 +48,9 @@ const Mentored: React.FC = () => {
                 <View style={{ height: 0, marginVertical: 10 }} />
               )}
               data={mentors}
-              renderItem={({ item }) => <MentorItem mentor={item} />}
+              renderItem={({ item }) => (
+                <MentorItem mentor={item} professions={professions} />
+              )}
             />
           ) : (
             <Subtitle style={{ textAlign: 'center' }}>

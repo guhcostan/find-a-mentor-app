@@ -42,14 +42,15 @@ export const SubtitleMentor = styled(Subtitle)`
   font-size: 14px;
 `;
 
-const MentorItem: React.FC = ({ mentor }) => {
+const MentorItem: React.FC = ({ mentor, professions }) => {
   const theme = useTheme();
   return (
     <Container>
       <TextContainer>
         <TitleMentor>{mentor?.name}</TitleMentor>
         <SubtitleMentor>
-          {mentor?.profession} - {mentor?.years}
+          {professions?.find(p => p.value === mentor?.profession)?.label} -{' '}
+          {mentor?.years}
         </SubtitleMentor>
       </TextContainer>
       <IconContainer>
