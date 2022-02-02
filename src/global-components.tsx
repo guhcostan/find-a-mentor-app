@@ -25,10 +25,3 @@ export const TextInput = styled.TextInput`
   border-radius: 3px;
   background-color: ${props => props.theme.colors.white};
 `;
-
-export const Selector = styled(RNPickerSelect)`
-  padding: 10px;
-  font-size: 16px;
-  border-radius: 4px;
-  background-color: ${props => props.theme.colors.white};
-`;

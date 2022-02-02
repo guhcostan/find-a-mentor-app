@@ -4,8 +4,9 @@ import { Formik } from 'formik';
 import RNPickerSelect from 'react-native-picker-select';
 import { ScreenContainer, TextInput, Title } from '../global-components';
 import { Button } from '../components/Button';
+import { putMentor } from '../util/db';
 
-const pickerSelectStyles = StyleSheet.create({
+export const pickerSelectStyles = StyleSheet.create({
   inputIOS: {
     fontSize: 16,
     padding: 10,
@@ -32,7 +33,7 @@ const Mentor: React.FC = () => {
         <Title style={{ marginBottom: 48 }}>Cadastre-se como mentor</Title>
         <Formik
           initialValues={{ email: '' }}
-          onSubmit={values => console.log(values)}
+          onSubmit={values => putMentor(values)}
         >
           {({ handleChange, handleBlur, handleSubmit, values }) => (
             <View>
@@ -54,6 +55,13 @@ const Mentor: React.FC = () => {
               />
               <TextInput
                 style={{ marginBottom: 24 }}
+                placeholder="Email"
+                onChangeText={handleChange('email')}
+                onBlur={handleBlur('email')}
+                value={values.email}
+              />
+              <TextInput
+                style={{ marginBottom: 24 }}
                 placeholder="Whatsapp"
                 onChangeText={handleChange('whatsapp')}
                 onBlur={handleBlur('whatsapp')}
@@ -61,7 +69,7 @@ const Mentor: React.FC = () => {
               />
               <TextInput
                 style={{ marginBottom: 24 }}
-                placeholder="Linkedin"
+                placeholder="Usuário no Linkedin"
                 onChangeText={handleChange('linkedin')}
                 onBlur={handleBlur('linkedin')}
                 value={values.linkedin}

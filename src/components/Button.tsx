@@ -1,33 +1,6 @@
 import React from 'react';
-import { StyleSheet } from 'react-native';
 
 import styled from 'styled-components';
-import colors from '../constants/colors';
-
-const styles = StyleSheet.create({
-  container: {
-    backgroundColor: colors.primary,
-    paddingVertical: 14,
-    borderRadius: 6,
-    borderWidth: 1,
-    borderColor: colors.primary,
-    marginVertical: 7,
-  },
-  containerOutline: {
-    backgroundColor: 'transparent',
-    borderColor: colors.border,
-  },
-
-  text: {
-    color: colors.white,
-    alignSelf: 'center',
-    fontSize: 18,
-    fontWeight: '500',
-  },
-  textOutline: {
-    color: colors.primary,
-  },
-});
 
 type ButtonProps = {
   onPress: () => void;

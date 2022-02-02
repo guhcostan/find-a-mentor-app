@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "229514994004",
+    "project_id": "find-a-mentor-f54a1",
+    "storage_bucket": "find-a-mentor-f54a1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:229514994004:android:b7390c326ed5f82e20e8c1",
+        "android_client_info": {
+          "package_name": "com.vixz.findamentor"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "229514994004-qhmun7emsi8i1r3r4c77e4g3ithj2bu7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDwt-B0_BRHbuFfObAXE_My6DqbyDFqWog"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "229514994004-qhmun7emsi8i1r3r4c77e4g3ithj2bu7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
