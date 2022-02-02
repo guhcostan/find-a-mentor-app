@@ -121,9 +121,9 @@ const Mentor: React.FC = () => {
               <Selector
                 name="years"
                 items={[
-                  { label: '1-2', value: 'novato' },
-                  { label: '3-6', value: 'intermediario' },
-                  { label: '6+', value: 'experiente' },
+                  { label: '1-2', value: 'Novato' },
+                  { label: '3-6', value: 'Intermediario' },
+                  { label: '6+', value: 'Experiente' },
                 ]}
                 placeholder={{ label: 'Anos de experiencia' }}
               />
