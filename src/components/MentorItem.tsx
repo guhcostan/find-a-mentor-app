@@ -6,11 +6,13 @@ import {
   Alert,
   View,
 } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import React from 'react';
 
 import { Ionicons } from '@expo/vector-icons';
 import styled from 'styled-components/native';
 import { useTheme } from 'styled-components';
+import { AdMobInterstitial } from 'expo-ads-admob';
 import { Subtitle, Title } from '../global-components';
 
 const Container = styled.View`
@@ -44,6 +46,29 @@ export const SubtitleMentor = styled(Subtitle)`
 
 const MentorItem: React.FC = ({ mentor, professions }) => {
   const theme = useTheme();
+  const showAds = async callback => {
+    const adsViewTodayJSON = await AsyncStorage.getItem('todayView');
+    const adsViewToday = JSON.parse(adsViewTodayJSON || '{}');
+    const today = new Date().getDate();
+    if (adsViewToday?.date !== today) {
+      await AsyncStorage.setItem(
+        'todayView',
+        JSON.stringify({
+          date: today,
+        }),
+      );
+      callback();
+      return;
+    }
+    await AdMobInterstitial.setAdUnitID(
+      'ca-app-pub-6179656158473202/3061477726',
+    );
+    await AdMobInterstitial.requestAdAsync({ servePersonalizedAds: true });
+    AdMobInterstitial.addEventListener('interstitialDidClose', () => {
+      callback();
+    });
+    await AdMobInterstitial.showAdAsync();
+  };
   return (
     <Container>
       <TextContainer>
@@ -55,7 +80,11 @@ const MentorItem: React.FC = ({ mentor, professions }) => {
       </TextContainer>
       <IconContainer>
         <TouchableOpacity
-          onPress={() => Linking.openURL(`https://wa.me/${mentor?.whatsapp}`)}
+          onPress={async () => {
+            await showAds(() =>
+              Linking.openURL(`https://wa.me/${mentor?.whatsapp}`),
+            );
+          }}
         >
           <Ionicons
             name="md-logo-whatsapp"
@@ -64,13 +93,15 @@ const MentorItem: React.FC = ({ mentor, professions }) => {
           />
         </TouchableOpacity>
         <TouchableOpacity
-          onPress={() =>
-            Linking.openURL(
-              mentor?.linkedin.includes('linkedin')
-                ? mentor?.linkedin
-                : `https://www.linkedin.com/in/${mentor?.linkedin}`,
-            )
-          }
+          onPress={async () => {
+            await showAds(() =>
+              Linking.openURL(
+                mentor?.linkedin.includes('linkedin')
+                  ? mentor?.linkedin
+                  : `https://www.linkedin.com/in/${mentor?.linkedin}`,
+              ),
+            );
+          }}
         >
           <Ionicons
             name="md-logo-linkedin"
@@ -79,27 +110,29 @@ const MentorItem: React.FC = ({ mentor, professions }) => {
           />
         </TouchableOpacity>
         <TouchableOpacity
-          onPress={() =>
-            Linking.openURL(`mailto:${mentor.email}`).catch(e => {
-              Alert.alert(
-                'Problema com email?',
-                'Deseja copiar o email para entrar em contato posteriormente?',
-                [
-                  {
-                    text: 'Fechar',
-                    onPress: () => null,
-                  },
-                  {
-                    text: 'Copiar',
-                    onPress: () => {
-                      Clipboard.setString(mentor.email);
-                      Alert.alert('Email copiado com sucesso');
+          onPress={async () => {
+            await showAds(() =>
+              Linking.openURL(`mailto:${mentor.email}`).catch(e => {
+                Alert.alert(
+                  'Problema com email?',
+                  'Deseja copiar o email para entrar em contato posteriormente?',
+                  [
+                    {
+                      text: 'Fechar',
+                      onPress: () => null,
                     },
-                  },
-                ],
-              );
-            })
-          }
+                    {
+                      text: 'Copiar',
+                      onPress: () => {
+                        Clipboard.setString(mentor.email);
+                        Alert.alert('Email copiado com sucesso');
+                      },
+                    },
+                  ],
+                );
+              }),
+            );
+          }}
         >
           <Ionicons name="md-mail" size={24} color={theme.colors.white} />
         </TouchableOpacity>

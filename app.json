@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "find-a-mentor-app",
-    "slug": "find-a-mentor-app",
+    "name": "Find a Mentor",
+    "slug": "find-a-mentor",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -23,10 +23,14 @@
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#FFFFFF"
+        "backgroundColor": "#121214"
       },
+      "versionCode": 2,
       "googleServicesFile": "./assets/google-services.json",
-      "package": "com.vixz.findamentor"
+      "package": "com.vixz.findamentor",
+      "config": {
+        "googleMobileAdsAppId": "ca-app-pub-6179656158473202~5138150188"
+      }
     },
     "web": {
       "favicon": "./assets/favicon.png"
