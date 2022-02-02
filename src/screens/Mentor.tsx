@@ -1,8 +1,9 @@
 import { ScrollView, StyleSheet, View } from 'react-native';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Formik } from 'formik';
 import RNPickerSelect from 'react-native-picker-select';
 import * as Yup from 'yup';
+import { useNavigation } from '@react-navigation/native';
 import {
   MaskedTextInput,
   ScreenContainer,
@@ -10,9 +11,10 @@ import {
   Title,
 } from '../global-components';
 import { Button } from '../components/Button';
-import { putMentor } from '../util/db';
+import { getProfessions, putMentor } from '../util/db';
 import TextInputValidation from '../components/TextInput';
 import Selector from '../components/Selector';
+import MaskTextInputValidation from '../components/MaskedTextInput';
 
 export const pickerSelectStyles = StyleSheet.create({
   inputIOS: {
@@ -35,6 +37,18 @@ export const pickerSelectStyles = StyleSheet.create({
   },
 });
 const Mentor: React.FC = () => {
+  const [professions, setProfessions] = useState([]);
+
+  const getProfessionsDB = async () => {
+    const professionsDB = await getProfessions();
+    setProfessions(professionsDB);
+  };
+
+  useEffect(() => {
+    getProfessionsDB();
+  }, []);
+
+  const navigation = useNavigation();
   return (
     <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
       <ScreenContainer>
@@ -51,15 +65,21 @@ const Mentor: React.FC = () => {
             email: Yup.string()
               .email('Email inválido')
               .required('Campo obrigatório'),
-            whatsapp: Yup.number()
-              .min(9, 'Muito pequeno')
-              .max(12, 'Muito grande')
+            whatsapp: Yup.string()
+              .min(14, 'Muito pequeno')
+              .max(15, 'Muito grande')
               .required('Campo obrigatório'),
             linkedin: Yup.string().required('Campo obrigatório'),
             profession: Yup.string().required('Campo obrigatório'),
             years: Yup.string().required('Campo obrigatório'),
           })}
-          onSubmit={values => putMentor(values)}
+          onSubmit={values => {
+            putMentor({
+              ...values,
+              whatsapp: values.whatsapp.replace(/\D/g, ''),
+            });
+            navigation.goBack();
+          }}
         >
           {({ handleSubmit }) => (
             <View>
@@ -68,12 +88,13 @@ const Mentor: React.FC = () => {
                 style={{ marginBottom: 24 }}
                 placeholder="Nome ou apelido"
               />
-              <TextInput
+              <TextInputValidation
                 style={{ marginBottom: 24 }}
                 placeholder="Email"
                 name="email"
+                autoCapitalize="none"
               />
-              <MaskedTextInput
+              <MaskTextInputValidation
                 style={{ marginBottom: 24 }}
                 placeholder="Whatsapp"
                 type="cel-phone"
@@ -84,23 +105,19 @@ const Mentor: React.FC = () => {
                 }}
                 name="whatsapp"
               />
-              <TextInput
+              <TextInputValidation
                 style={{ marginBottom: 24 }}
                 placeholder="Usuário no Linkedin"
                 name="linkedin"
+                autoCapitalize="none"
               />
-              <Selector
-                items={[
-                  { label: 'Desenvolvedor Frontend', value: 'web-developer' },
-                  {
-                    label: 'Desenvolvedor Backend',
-                    value: 'backend-developer',
-                  },
-                  { label: 'Desenvolvedor Mobile', value: 'mobile-developer' },
-                ]}
-                name="profession"
-                placeholder={{ label: 'Selecione sua profissão' }}
-              />
+              {professions.length > 0 && (
+                <Selector
+                  items={professions}
+                  name="profession"
+                  placeholder={{ label: 'Selecione sua profissão' }}
+                />
+              )}
               <Selector
                 name="years"
                 items={[
@@ -110,7 +127,12 @@ const Mentor: React.FC = () => {
                 ]}
                 placeholder={{ label: 'Anos de experiencia' }}
               />
-              <Button style={{ marginTop: 24 }} onPress={handleSubmit}>
+              <Button
+                style={{ marginTop: 24 }}
+                onPress={() => {
+                  handleSubmit();
+                }}
+              >
                 Enviar
               </Button>
             </View>

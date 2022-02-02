@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, FlatList, View } from 'react-native';
 import RNPickerSelect from 'react-native-picker-select';
 import { ScreenContainer, Selector, Subtitle } from '../global-components';
-import { getMentors } from '../util/db';
+import { getMentors, getProfessions } from '../util/db';
 import MentorItem from '../components/MentorItem';
 import { pickerSelectStyles } from './Mentor';
 
@@ -10,6 +10,13 @@ const Mentored: React.FC = () => {
   const [mentors, setMentors] = useState([]);
   const [profession, setProfession] = useState();
   const [loading, setLoading] = useState(false);
+  const [professions, setProfessions] = useState([]);
+
+  const getProfessionsDB = async () => {
+    const professionsDB = await getProfessions();
+    setProfessions(professionsDB);
+  };
+
   const updateMentors = async () => {
     setLoading(true);
     const mentorsDB = await getMentors(profession);
@@ -18,25 +25,21 @@ const Mentored: React.FC = () => {
   };
   useEffect(() => {
     updateMentors();
+    getProfessionsDB();
   }, []);
   return (
     <ScreenContainer>
-      <RNPickerSelect
-        onValueChange={newProfession => {
-          setProfession(newProfession);
-        }}
-        onDonePress={() => updateMentors()}
-        items={[
-          { label: 'Desenvolvedor Frontend', value: 'web-developer' },
-          {
-            label: 'Desenvolvedor Backend',
-            value: 'backend-developer',
-          },
-          { label: 'Desenvolvedor Mobile', value: 'mobile-developer' },
-        ]}
-        placeholder={{ label: 'Selecione sua profissão' }}
-        style={pickerSelectStyles}
-      />
+      {professions.length > 0 && (
+        <RNPickerSelect
+          onValueChange={newProfession => {
+            setProfession(newProfession);
+          }}
+          onDonePress={() => updateMentors()}
+          items={professions}
+          placeholder={{ label: 'Selecione sua profissão' }}
+          style={pickerSelectStyles}
+        />
+      )}
       <View style={{ flex: 1, justifyContent: 'center' }}>
         {!loading ? (
           mentors.length > 0 ? (
