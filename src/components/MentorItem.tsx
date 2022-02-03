@@ -13,7 +13,7 @@ import { Ionicons } from '@expo/vector-icons';
 import styled from 'styled-components/native';
 import { useTheme } from 'styled-components';
 import { AdMobInterstitial } from 'expo-ads-admob';
-import { Subtitle, Title } from '../global-components';
+import { Badge, BadgeText, Subtitle, Title } from '../global-components';
 
 const Container = styled.View`
   background-color: ${props => props.theme.colors.dark2};
@@ -21,6 +21,8 @@ const Container = styled.View`
   align-items: center;
   text-align: center;
   padding: 16px;
+  position: relative;
+  overflow: visible;
   border-radius: 6px;
 `;
 
@@ -74,74 +76,82 @@ const MentorItem: React.FC = ({ mentor, professions }) => {
     }
   };
   return (
-    <Container>
-      <TextContainer>
-        <TitleMentor>{mentor?.name}</TitleMentor>
-        <SubtitleMentor>
-          {professions?.find(p => p.value === mentor?.profession)?.label} -{' '}
-          {mentor?.years}
-        </SubtitleMentor>
-      </TextContainer>
-      <IconContainer>
-        <TouchableOpacity
-          onPress={async () => {
-            await showAds(() =>
-              Linking.openURL(`https://wa.me/${mentor?.whatsapp}`),
-            );
-          }}
-        >
-          <Ionicons
-            name="md-logo-whatsapp"
-            size={24}
-            color={theme.colors.white}
-          />
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={async () => {
-            await showAds(() =>
-              Linking.openURL(
-                mentor?.linkedin.includes('linkedin')
-                  ? mentor?.linkedin
-                  : `https://www.linkedin.com/in/${mentor?.linkedin}`,
-              ),
-            );
-          }}
-        >
-          <Ionicons
-            name="md-logo-linkedin"
-            size={24}
-            color={theme.colors.white}
-          />
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={async () => {
-            await showAds(() =>
-              Linking.openURL(`mailto:${mentor.email}`).catch(e => {
-                Alert.alert(
-                  'Problema com email?',
-                  'Deseja copiar o email para entrar em contato posteriormente?',
-                  [
-                    {
-                      text: 'Fechar',
-                      onPress: () => null,
-                    },
-                    {
-                      text: 'Copiar',
-                      onPress: () => {
-                        Clipboard.setString(mentor.email);
-                        Alert.alert('Email copiado com sucesso');
+    <View style={{ paddingTop: 20 }}>
+      <Container>
+        {mentor?.premium && (
+          <Badge>
+            <Ionicons name="star" color="white" size={16} />
+            <BadgeText>Premium</BadgeText>
+          </Badge>
+        )}
+        <TextContainer>
+          <TitleMentor>{mentor?.name}</TitleMentor>
+          <SubtitleMentor>
+            {professions?.find(p => p.value === mentor?.profession)?.label} -{' '}
+            {mentor?.years}
+          </SubtitleMentor>
+        </TextContainer>
+        <IconContainer>
+          <TouchableOpacity
+            onPress={async () => {
+              await showAds(() =>
+                Linking.openURL(`https://wa.me/${mentor?.whatsapp}`),
+              );
+            }}
+          >
+            <Ionicons
+              name="md-logo-whatsapp"
+              size={24}
+              color={theme.colors.white}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={async () => {
+              await showAds(() =>
+                Linking.openURL(
+                  mentor?.linkedin.includes('linkedin')
+                    ? mentor?.linkedin
+                    : `https://www.linkedin.com/in/${mentor?.linkedin}`,
+                ),
+              );
+            }}
+          >
+            <Ionicons
+              name="md-logo-linkedin"
+              size={24}
+              color={theme.colors.white}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={async () => {
+              await showAds(() =>
+                Linking.openURL(`mailto:${mentor.email}`).catch(e => {
+                  Alert.alert(
+                    'Problema com email?',
+                    'Deseja copiar o email para entrar em contato posteriormente?',
+                    [
+                      {
+                        text: 'Fechar',
+                        onPress: () => null,
                       },
-                    },
-                  ],
-                );
-              }),
-            );
-          }}
-        >
-          <Ionicons name="md-mail" size={24} color={theme.colors.white} />
-        </TouchableOpacity>
-      </IconContainer>
-    </Container>
+                      {
+                        text: 'Copiar',
+                        onPress: () => {
+                          Clipboard.setString(mentor.email);
+                          Alert.alert('Email copiado com sucesso');
+                        },
+                      },
+                    ],
+                  );
+                }),
+              );
+            }}
+          >
+            <Ionicons name="md-mail" size={24} color={theme.colors.white} />
+          </TouchableOpacity>
+        </IconContainer>
+      </Container>
+    </View>
   );
 };
 export default MentorItem;

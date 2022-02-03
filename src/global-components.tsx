@@ -19,6 +19,27 @@ export const ScreenContainer = styled.View`
   padding: 24px;
   flex: 1;
 `;
+export const Badge = styled.View`
+  background-color: ${props => props.theme.colors.primary};
+  padding: 10px;
+  border-radius: 50px;
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+  z-index: 1;
+  right: 15px;
+  top: -20px;
+`;
+
+export const BadgeText = styled.Text`
+  font-size: 12px;
+  font-family: 'Roboto_700Bold';
+  margin-left: 4px;
+  color: ${props => props.theme.colors.white};
+`;
+
 export const TextInput = styled.TextInput`
   padding: 10px;
   font-size: 16px;
