@@ -1,14 +1,28 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { AdMobInterstitial } from 'expo-ads-admob';
+import { AdMobInterstitial, AdMobRewarded } from 'expo-ads-admob';
 import * as Device from 'expo-device';
+import { Alert } from 'react-native';
 
 const showAds = async callback => {
-  await AdMobInterstitial.setAdUnitID('ca-app-pub-6179656158473202/3061477726');
-  await AdMobInterstitial.requestAdAsync({ servePersonalizedAds: true });
-  AdMobInterstitial.addEventListener('interstitialDidClose', () => {
-    callback();
-  });
-  await AdMobInterstitial.showAdAsync();
+  const adsViewTodayJSON = await AsyncStorage.getItem('todayView');
+  const adsViewToday = JSON.parse(adsViewTodayJSON || '{}');
+  if (adsViewToday.clicks <= 5) {
+    await AdMobInterstitial.setAdUnitID(
+      'ca-app-pub-6179656158473202/3061477726',
+    );
+    await AdMobInterstitial.requestAdAsync({ servePersonalizedAds: true });
+    AdMobInterstitial.addEventListener('interstitialDidClose', () => {
+      callback();
+    });
+    await AdMobInterstitial.showAdAsync();
+  } else {
+    await AdMobRewarded.setAdUnitID('ca-app-pub-6179656158473202~5138150188');
+    await AdMobRewarded.requestAdAsync({ servePersonalizedAds: true });
+    AdMobRewarded.addEventListener('rewardedVideoUserDidEarnReward', () => {
+      callback();
+    });
+    await AdMobRewarded.showAdAsync();
+  }
 };
 
 const checkTodayClicks = async callback => {
@@ -20,6 +34,7 @@ const checkTodayClicks = async callback => {
       'todayView',
       JSON.stringify({
         date: today,
+        clicks: adsViewToday?.clicks + 1,
       }),
     );
     callback();
@@ -37,7 +52,7 @@ export const showAdsOrModal = async (
       await InAppPurchases.connectAsync();
       const subscriptions = await InAppPurchases.getPurchaseHistoryAsync();
       if (subscriptions.results?.filter(r => r.purchaseState === 1)) {
-        alert(JSON.stringify(subscriptions));
+        Alert.alert(JSON.stringify(subscriptions));
         callback();
         return;
       }
