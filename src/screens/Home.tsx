@@ -9,14 +9,14 @@ import Logo from '../components/Logo';
 
 const screens = [
   {
+    title: 'Quero ser mentorado',
+    subtitle: 'Estou querendo me desenvolver no mercado',
+    target: 'Mentored',
+  },
+  {
     title: 'Quero ser um mentor',
     subtitle: 'Já tenho experiencia no mercado e gostaria de contribuir',
     target: 'Mentor',
-  },
-  {
-    title: 'Quero ser um mentorado',
-    subtitle: 'Estou querendo me desenvolver no mercado',
-    target: 'Mentored',
   },
 ];
 

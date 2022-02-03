@@ -12,8 +12,8 @@ import React from 'react';
 import { Ionicons } from '@expo/vector-icons';
 import styled from 'styled-components/native';
 import { useTheme } from 'styled-components';
-import { AdMobInterstitial } from 'expo-ads-admob';
 import { Badge, BadgeText, Subtitle, Title } from '../global-components';
+import { showAdsOrModal } from '../util/mentor';
 
 const Container = styled.View`
   background-color: ${props => props.theme.colors.dark2};
@@ -48,33 +48,6 @@ export const SubtitleMentor = styled(Subtitle)`
 
 const MentorItem: React.FC = ({ mentor, professions }) => {
   const theme = useTheme();
-  const showAds = async callback => {
-    try {
-      const adsViewTodayJSON = await AsyncStorage.getItem('todayView');
-      const adsViewToday = JSON.parse(adsViewTodayJSON || '{}');
-      const today = new Date().getDate();
-      if (adsViewToday?.date !== today) {
-        await AsyncStorage.setItem(
-          'todayView',
-          JSON.stringify({
-            date: today,
-          }),
-        );
-        callback();
-        return;
-      }
-      await AdMobInterstitial.setAdUnitID(
-        'ca-app-pub-6179656158473202/3061477726',
-      );
-      await AdMobInterstitial.requestAdAsync({ servePersonalizedAds: true });
-      AdMobInterstitial.addEventListener('interstitialDidClose', () => {
-        callback();
-      });
-      await AdMobInterstitial.showAdAsync();
-    } catch (e) {
-      callback();
-    }
-  };
   return (
     <View style={{ paddingTop: 20 }}>
       <Container>
@@ -94,8 +67,9 @@ const MentorItem: React.FC = ({ mentor, professions }) => {
         <IconContainer>
           <TouchableOpacity
             onPress={async () => {
-              await showAds(() =>
-                Linking.openURL(`https://wa.me/${mentor?.whatsapp}`),
+              await showAdsOrModal(
+                () => Linking.openURL(`https://wa.me/${mentor?.whatsapp}`),
+                mentor?.premium,
               );
             }}
           >
@@ -107,12 +81,14 @@ const MentorItem: React.FC = ({ mentor, professions }) => {
           </TouchableOpacity>
           <TouchableOpacity
             onPress={async () => {
-              await showAds(() =>
-                Linking.openURL(
-                  mentor?.linkedin.includes('linkedin')
-                    ? mentor?.linkedin
-                    : `https://www.linkedin.com/in/${mentor?.linkedin}`,
-                ),
+              await showAdsOrModal(
+                () =>
+                  Linking.openURL(
+                    mentor?.linkedin.includes('linkedin')
+                      ? mentor?.linkedin
+                      : `https://www.linkedin.com/in/${mentor?.linkedin}`,
+                  ),
+                mentor?.premium,
               );
             }}
           >
@@ -124,26 +100,28 @@ const MentorItem: React.FC = ({ mentor, professions }) => {
           </TouchableOpacity>
           <TouchableOpacity
             onPress={async () => {
-              await showAds(() =>
-                Linking.openURL(`mailto:${mentor.email}`).catch(e => {
-                  Alert.alert(
-                    'Problema com email?',
-                    'Deseja copiar o email para entrar em contato posteriormente?',
-                    [
-                      {
-                        text: 'Fechar',
-                        onPress: () => null,
-                      },
-                      {
-                        text: 'Copiar',
-                        onPress: () => {
-                          Clipboard.setString(mentor.email);
-                          Alert.alert('Email copiado com sucesso');
+              await showAdsOrModal(
+                () =>
+                  Linking.openURL(`mailto:${mentor.email}`).catch(e => {
+                    Alert.alert(
+                      'Problema com email?',
+                      'Deseja copiar o email para entrar em contato posteriormente?',
+                      [
+                        {
+                          text: 'Fechar',
+                          onPress: () => null,
                         },
-                      },
-                    ],
-                  );
-                }),
+                        {
+                          text: 'Copiar',
+                          onPress: () => {
+                            Clipboard.setString(mentor.email);
+                            Alert.alert('Email copiado com sucesso');
+                          },
+                        },
+                      ],
+                    );
+                  }),
+                mentor?.premium,
               );
             }}
           >

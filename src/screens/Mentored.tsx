@@ -45,9 +45,10 @@ const Mentored: React.FC = () => {
           mentors.length > 0 ? (
             <FlatList
               ItemSeparatorComponent={() => (
-                <View style={{ height: 0, marginVertical: 10 }} />
+                <View style={{ height: 0, marginVertical: 2 }} />
               )}
               data={mentors}
+              keyExtractor={item => item.id}
               renderItem={({ item }) => (
                 <MentorItem mentor={item} professions={professions} />
               )}

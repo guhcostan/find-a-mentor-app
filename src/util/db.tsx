@@ -24,7 +24,7 @@ export async function getMentors(profession) {
     querySnapshot = await getDocs(collection(db, 'mentors'));
   }
   const mentors = [];
-  querySnapshot.forEach(data => mentors.push(data.data()));
+  querySnapshot.forEach(data => mentors.push({ ...data.data(), id: data.id }));
   return mentors;
 }
 

@@ -2,7 +2,7 @@
   "expo": {
     "name": "Find a Mentor",
     "slug": "find-a-mentor",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -25,7 +25,7 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#121214"
       },
-      "versionCode": 3,
+      "versionCode": 4,
       "googleServicesFile": "./assets/google-services.json",
       "package": "com.vixz.findamentor",
       "config": {
