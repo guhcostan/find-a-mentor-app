@@ -16,7 +16,7 @@ const showAds = async callback => {
     });
     await AdMobInterstitial.showAdAsync();
   } else {
-    await AdMobRewarded.setAdUnitID('ca-app-pub-6179656158473202~5138150188');
+    await AdMobRewarded.setAdUnitID('ca-app-pub-6179656158473202/5653720150');
     await AdMobRewarded.requestAdAsync({ servePersonalizedAds: true });
     AdMobRewarded.addEventListener('rewardedVideoUserDidEarnReward', () => {
       callback();
