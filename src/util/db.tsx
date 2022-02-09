@@ -12,6 +12,13 @@ export async function putMentor(mentor) {
   const docRef = await addDoc(collection(db, 'mentors'), mentor);
   console.log('Document written with ID: ', docRef.id);
 }
+export async function putProfession(profession: string | undefined) {
+  const db = getFirestore();
+  const docRef = await addDoc(collection(db, 'professions'), {
+    name: profession,
+  });
+  return docRef.id;
+}
 
 export async function getMentors(profession) {
   const db = getFirestore();

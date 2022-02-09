@@ -1,9 +1,19 @@
-import { ScrollView, StyleSheet, View } from 'react-native';
+import {
+  ScrollView,
+  StyleSheet,
+  View,
+  Text,
+  Modal,
+  Pressable,
+  Alert,
+  TouchableOpacity,
+} from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { Formik } from 'formik';
 import RNPickerSelect from 'react-native-picker-select';
 import * as Yup from 'yup';
 import { useNavigation } from '@react-navigation/native';
+import { Ionicons } from '@expo/vector-icons';
 import {
   MaskedTextInput,
   ScreenContainer,
@@ -11,7 +21,7 @@ import {
   Title,
 } from '../global-components';
 import { Button } from '../components/Button';
-import { getProfessions, putMentor } from '../util/db';
+import { getProfessions, putMentor, putProfession } from '../util/db';
 import TextInputValidation from '../components/TextInput';
 import Selector from '../components/Selector';
 import MaskTextInputValidation from '../components/MaskedTextInput';
@@ -81,7 +91,7 @@ const Mentor: React.FC = () => {
             navigation.goBack();
           }}
         >
-          {({ handleSubmit }) => (
+          {({ handleSubmit, values, setFieldValue }) => (
             <View>
               <TextInputValidation
                 name="name"
@@ -113,7 +123,32 @@ const Mentor: React.FC = () => {
               />
               {professions.length > 0 && (
                 <Selector
-                  items={professions}
+                  items={[
+                    ...professions,
+                    {
+                      label: 'Não encontrei minha profissão',
+                      value: 'notFound',
+                    },
+                  ]}
+                  onClose={() => {
+                    if (values?.profession === 'notFound') {
+                      Alert.prompt('Digite sua profissão', '', [
+                        {
+                          text: 'Cancelar',
+                        },
+                        {
+                          text: 'Criar',
+                          onPress: value => {
+                            putProfession(value).then(id => {
+                              getProfessionsDB().then(() =>
+                                setFieldValue('profession', id),
+                              );
+                            });
+                          },
+                        },
+                      ]);
+                    }
+                  }}
                   name="profession"
                   placeholder={{ label: 'Selecione sua profissão' }}
                 />
