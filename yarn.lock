@@ -4803,6 +4803,16 @@ expo-keep-awake@~10.0.2:
   resolved "https://registry.yarnpkg.com/expo-keep-awake/-/expo-keep-awake-10.0.2.tgz#706bda839782bb3e8ad4cbe43bde471a56368813"
   integrity sha512-Ro1lgyKldbFs4mxhWM+goX9sg0S2SRR8FiJJeOvaRzf8xNhrZfWA00Zpr+/3ocCoWQ3eEL+X9UF4PXXHf0KoOg==
 
+expo-linking@~3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/expo-linking/-/expo-linking-3.0.0.tgz#67f06b0be4ac1da911c46535a704d24eca34e344"
+  integrity sha512-TgRB4JTdhMRo79rTu9E9zwzWyBUJxHpSbHFlv0ZfMAwU+qFCsL9zZsL44R/yj7xrvcLOjqbCVmBszLQ0pFOt1g==
+  dependencies:
+    expo-constants "~13.0.0"
+    invariant "^2.2.4"
+    qs "^6.9.1"
+    url-parse "^1.4.4"
+
 expo-modules-autolinking@0.5.5, expo-modules-autolinking@~0.5.1:
   version "0.5.5"
   resolved "https://registry.yarnpkg.com/expo-modules-autolinking/-/expo-modules-autolinking-0.5.5.tgz#6bcc42072dcbdfca79d207b7f549f1fdb54a2b74"
@@ -4834,6 +4844,11 @@ expo-status-bar@~1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/expo-status-bar/-/expo-status-bar-1.2.0.tgz#16e73205da563f9536f562e439081e30e318a82e"
   integrity sha512-pVZZ/kDCXFK79E4dCtRecs3XLC8aiwlciutSd/fFmUPJSQZ1Txia6hlKajPt0GAYft8/YnT0V3URXzWZOBniYQ==
+
+expo-store-review@~5.1.0:
+  version "5.1.1"
+  resolved "https://registry.yarnpkg.com/expo-store-review/-/expo-store-review-5.1.1.tgz#4c14a3b89be084f3f52bc86c83a1c2bbd663b366"
+  integrity sha512-FiSDjN2MBKxUwM8I97svjq9m0q6jgYMkvGWpve66Mb7k/bT8mWzu32DC46UL+qccJgL8zFJk5lvI7d8PQIefRQ==
 
 expo@^44.0.6:
   version "44.0.6"
@@ -8032,6 +8047,13 @@ punycode@^2.1.0, punycode@^2.1.1:
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/punycode/-/punycode-2.1.1.tgz#b58b010ac40c22c5657616c8d2c2c02c7bf479ec"
   integrity sha512-XRsRjdf+j5ml+y/6GKHPZbrF/8p2Yga0JPtdqTIY2Xe5ohJPD9saDJJLPvp9+NSBprVvevdXZybnj2cv8OEd0A==
+
+qs@^6.9.1:
+  version "6.10.3"
+  resolved "https://registry.yarnpkg.com/qs/-/qs-6.10.3.tgz#d6cde1b2ffca87b5aa57889816c5f81535e22e8e"
+  integrity sha512-wr7M2E0OFRfIfJZjKGieI8lBKb7fRCH4Fv5KNPEs7gJ8jadvotdsS08PzOKR7opXhZ/Xkjtt3WF9g38drmyRqQ==
+  dependencies:
+    side-channel "^1.0.4"
 
 query-string@^7.0.0:
   version "7.1.0"

@@ -32,7 +32,10 @@ export const Home = ({ navigation }: Props) => {
   return (
     <ContainerList
       data={screens}
-      contentContainerStyle={{ justifyContent: 'center' }}
+      contentContainerStyle={{
+        justifyContent: 'center',
+        flexGrow: 1,
+      }}
       ListHeaderComponent={() => (
         <View style={{ width: '100%', alignItems: 'center', padding: 30 }}>
           <Logo />

@@ -25,6 +25,7 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#121214"
       },
+      "playStoreUrl": "https://play.google.com/store/apps/details?id=com.vixz.findamentor",
       "versionCode": 6,
       "googleServicesFile": "./assets/google-services.json",
       "package": "com.vixz.findamentor",

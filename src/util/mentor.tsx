@@ -2,6 +2,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { AdMobInterstitial, AdMobRewarded } from 'expo-ads-admob';
 import * as Device from 'expo-device';
 import { Alert } from 'react-native';
+import * as StoreReview from 'expo-store-review';
 
 const showAds = async callback => {
   const adsViewTodayJSON = await AsyncStorage.getItem('todayView');
@@ -63,8 +64,10 @@ export const showAdsOrModal = async (
       return;
     }
     await showAds(callback);
+    if (await StoreReview.hasAction()) {
+      StoreReview.requestReview();
+    }
   } catch (e) {
-    console.log(e);
     callback();
   }
 };
